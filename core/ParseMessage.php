@@ -15,6 +15,8 @@ class ParseMessage
     private $userId = '';
 
     private $battleFlag = false;
+//    private $battleStep = '';
+    private $battleStep = 1;
     private $enemyBattleProps = [];
     private $userBattleProps = [];
 
@@ -75,7 +77,7 @@ class ParseMessage
     protected function parseManyMessages()
     {
 
-        $firstMessage = array_shift($this->mesArr);
+        $firstMessage = $this->mesArr[0];
 
         $firstEmoji = $this->parseEmoji($firstMessage);
 
@@ -323,12 +325,16 @@ var_dump($this->btnArr);
 
         $action = $this->arrEvent[$event];
         $this->battleFlag = true;
+        $this->battleStep = 1;
 
         return $action;
     }
 
     protected function battleStep()
     {
+        if ($this->battleStep === 1){
+            var_dump('mi tyt');
+        }
         echo '<pre>';
         var_dump($this->mesArr);
         var_dump($this->btnArr);
