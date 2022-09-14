@@ -10,9 +10,19 @@ $arr = [
         'btn'=>'Освежевать'
     ],
 
+    'smallEat' => [
+        'active' => 'click_btn',
+        'btn'=>'Собрать'
+    ],
+
     'battleStart' => [
         'active' => 'click_btn',
         'btn'=>'В бой'
+    ],
+
+    'trapAttack' => [
+        'active' => 'click_btn',
+        'btn'=>'Освободиться'
     ],
 
     'description' => [
@@ -48,9 +58,24 @@ $arr = [
         'btn'=>'Прервать поиск'
     ],
 
+    'skillRoulette' => [
+        'active' => 'click_btn',
+        'btn'=>'Бросить кости'
+    ],
+
     'openBox' => [
         'active' => 'click_btn',
         'btn'=>'Открыть'
+    ],
+
+    'findLoot' => [
+        'active' => 'click_btn',
+        'btn'=>'Обыскать'
+    ],
+
+    'skillUp' => [
+        'active' => 'click_btn',
+        'btn'=>'Собрать'
     ],
 
     '1incident' => [

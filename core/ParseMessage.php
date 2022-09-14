@@ -15,8 +15,9 @@ class ParseMessage
     private $userId = '';
 
     private $battleFlag = false;
-//    private $battleStep = '';
-    private $battleStep = 1;
+//    private $battleFlag = true;
+    private $battleStep = '';
+//    private $battleStep = 1;
     private $enemyBattleProps = [];
     private $userBattleProps = [];
 
@@ -25,6 +26,14 @@ class ParseMessage
 
         $this->request = json_decode($ajaxRequest, true)[0];
 
+        // обработка кнопок
+        if ($this->request['btn']) {
+            $this->btnArr = $this->request['btn'];
+        }
+
+        // вытягиваем id игрока
+        $this->userId = $this->request['id'];
+
         //обработка сообщений
         $mesStr = $this->parseImg($this->request['mes']);
 
@@ -32,30 +41,28 @@ class ParseMessage
 
         $this->detailParseMessage();
 
-        // обработка кнопок
-        if ($this->request['btn']) {
-
-            $this->btnArr = $this->request['btn'];
-            $this->parseBtn();
-        }
-
-        // вытягиваем id игрока
-        $this->userId = $this->request['id'];
-
         return $this->result ?: ['active' => 'not active'];
     }
 
     protected function detailParseMessage()
     {
-        if ($this->battleFlag) $this->battleStep();
+        $battle = in_array('Состояние:', $this->mesArr);
 
-        if (count($this->mesArr) > 1) {
+        if ($this->battleFlag || $battle) {
 
-            $this->parseManyMessages();
+            $this->battleStep();
 
         } else {
 
-            $this->parseOneMessages($this->mesArr[0]);
+            if (count($this->mesArr) > 1) {
+
+                $this->parseManyMessages();
+
+            } else {
+
+                $this->parseOneMessages($this->mesArr[0]);
+
+            }
 
         }
 
@@ -76,6 +83,7 @@ class ParseMessage
 
     protected function parseManyMessages()
     {
+
 
         $firstMessage = $this->mesArr[0];
 
@@ -135,7 +143,6 @@ class ParseMessage
 
     protected function detectFirstRowEventMethod($event)
     {
-
         if (method_exists($this, $event)) {
             return $this->{$event}($event);
         }
@@ -143,6 +150,8 @@ class ParseMessage
 
     protected function detectManyRowEventMethod()
     {
+
+        unset($this->mesArr[0]);
 
         foreach ($this->mesArr as $item) {
             if (!empty($item)) {
@@ -174,14 +183,6 @@ class ParseMessage
         return $action;
     }
 
-    protected function parseBtn()
-    {
-        echo '<pre>';
-        var_dump($this->btnArr);
-        echo '</pre>';
-
-    }
-
     protected function parseImg($str): string
     {
         preg_match_all('/\<img[^\>]*\>/', $str, $matches);
@@ -198,24 +199,48 @@ class ParseMessage
     }
 
 
-    protected function parseEmoji($char): string
+    protected function parseEmoji($str): string
     {
-        return mb_ord(mb_substr($char, 0, 1)) > 1900 ? mb_substr($char, 0, 1) : '';
+        $put = mb_substr($str, 0, 1);
+        if (!empty($put)) {
+            return mb_ord($put) > 1900 ? $put : '';
+        } else {
+            return '';
+        }
     }
 
     protected function findEvent($event)
     {
+
         $action = $this->arrEvent[$event];
 
         $subAction = $this->detectManyRowEventMethod();
 
+        if (!empty($this->userBattleProps['hp']) && $this->userBattleProps['hp'] < 80) $subAction = $this->goHealing();
+        if (!empty($_COOKIE['userHP']) && $_COOKIE['userHP'] < 80) $subAction = $this->goHealing();
+
         return $subAction ?: $action;
+    }
+
+    protected function goHealing()
+    {
+        $active = ['active' => 'click_btn', 'btn' => 'Отдых'];
+//        var_dump('countTrophy');
+        return $active;
     }
 
     protected function countTrophy($event)
     {
 //        var_dump('countTrophy');
         return '';
+    }
+
+    protected function trapAttack($event)
+    {
+        $this->userBattleProps['hp'] = 70;
+        $action = $this->arrEvent[$event];
+
+        return $action;
     }
 
     protected function breakCraft($event)
@@ -332,37 +357,75 @@ class ParseMessage
 
     protected function battleStep()
     {
+        $battleEvent = [
+            '🗣'
+        ];
+
+        $this->parseAttackBtn();
+
         $this->parseBattleMessage();
-        echo '<pre>';
-//        var_dump($this->mesArr);
-        var_dump($this->btnArr);
-        echo '</pre>';
+
+        $this->result = $this->calcAttack();
+
+        return $this->result;
+
+    }
+
+    protected function parseAttackBtn()
+    {
+
+        if (count($this->btnArr) === 1) {
+            if ($this->btnArr[0] === 'Яркий свет') $this->btnArr = [];
+        }
+
+        if (count($this->btnArr) === 2) {
+            if ($this->btnArr[1] === 'Сбежать') $this->btnArr = [];
+        }
+    }
+
+    protected function calcAttack()
+    {
+        $countAttack = count($this->btnArr);
+
+        switch ($countAttack) {
+            case 0:
+                $this->result = ['active' => 'click_btn', 'btn' => 'Атака'];
+                break;
+            case 1:
+                $this->result = ['active' => 'click_btn', 'btn' => $this->btnArr[0]];
+                break;
+            default:
+                $this->result = $this->calcAttackManyBtn();
+        }
+
+        return $this->result;
+    }
+
+    protected function calcAttackManyBtn()
+    {
+
     }
 
     protected function parseBattleMessage()
     {
-        if ($this->battleStep === 1) {
-            echo '<pre>';
-            var_dump($this->mesArr);
-            echo '</pre>';
-
-            // вычисляем класс и хп врага
-            $this->getInfoHP($this->mesArr[0], 'enemyBattleProps');
-            $this->getInfoHP($this->mesArr[4], 'userBattleProps');
-//            $first = $this->mesArr[0];
-//            $emoji = $this->parseEmoji($first);
-//            if($emoji === '❤'){
-//                $first = str_replace('❤', '', $first);
-//                $arrExplode = explode(':', $first);
-//                $this->enemyBattleProps['nation'] = trim($arrExplode[0]);
-//                $this->enemyBattleProps['hp'] = $this->getPercentHP($arrExplode[1]);
-//                var_dump($this->enemyBattleProps);
-//            }
-
-//            $userHp = $this->mesArr[0];
-            var_dump($this->enemyBattleProps);
-            var_dump($this->userBattleProps);
+        foreach ($this->mesArr as $mes) {
+            $emoji = $this->parseEmoji($mes);
+            if ($emoji === '❤') $this->getInfoHP($mes, 'enemyBattleProps');
+            if ($emoji === '❤') $this->getInfoHP($mes, 'enemyBattleProps');
+            if ($emoji === '💚') $this->getInfoHP($mes, 'userBattleProps');
         }
+
+        $arrEnd = [
+            "Бой завершен. Вы победили!",
+            "Бой завершен! Вы проиграли!",
+        ];
+
+        foreach ($arrEnd as $res) {
+            if (in_array($res, $this->mesArr)) {
+                $battleFlag = false;
+            }
+        }
+
     }
 
     protected function getInfoHP($mes, $arrName)
@@ -377,7 +440,10 @@ class ParseMessage
         $this->{$arrName}['nation'] = trim($arrExplode[0]);
 
         $arr = explode('/', trim($arrExplode[1]));
-        $this->{$arrName}['hp'] = ((int)$arr[0] / (int)$arr[1]) * 100;
+        $hp = ((int)$arr[0] / (int)$arr[1]) * 100;
+        $this->{$arrName}['hp'] = $hp;
+
+        if ($arrName == 'userBattleProps' && $hp < 100) setcookie("userHP", $hp, time() + 3600);
 
     }
 
