@@ -177,7 +177,7 @@ class ParseMessage
     protected function parseBtn()
     {
         echo '<pre>';
-var_dump($this->btnArr);
+        var_dump($this->btnArr);
         echo '</pre>';
 
     }
@@ -332,17 +332,52 @@ var_dump($this->btnArr);
 
     protected function battleStep()
     {
-        if ($this->battleStep === 1){
-            var_dump('mi tyt');
-        }
+        $this->parseBattleMessage();
         echo '<pre>';
-        var_dump($this->mesArr);
+//        var_dump($this->mesArr);
         var_dump($this->btnArr);
         echo '</pre>';
     }
 
     protected function parseBattleMessage()
     {
+        if ($this->battleStep === 1) {
+            echo '<pre>';
+            var_dump($this->mesArr);
+            echo '</pre>';
+
+            // вычисляем класс и хп врага
+            $this->getInfoHP($this->mesArr[0], 'enemyBattleProps');
+            $this->getInfoHP($this->mesArr[4], 'userBattleProps');
+//            $first = $this->mesArr[0];
+//            $emoji = $this->parseEmoji($first);
+//            if($emoji === '❤'){
+//                $first = str_replace('❤', '', $first);
+//                $arrExplode = explode(':', $first);
+//                $this->enemyBattleProps['nation'] = trim($arrExplode[0]);
+//                $this->enemyBattleProps['hp'] = $this->getPercentHP($arrExplode[1]);
+//                var_dump($this->enemyBattleProps);
+//            }
+
+//            $userHp = $this->mesArr[0];
+            var_dump($this->enemyBattleProps);
+            var_dump($this->userBattleProps);
+        }
+    }
+
+    protected function getInfoHP($mes, $arrName)
+    {
+        $emoji = $this->parseEmoji($mes);
+
+        if ($emoji) {
+            $mes = str_replace($emoji, '', $mes);
+        }
+
+        $arrExplode = explode(':', $mes);
+        $this->{$arrName}['nation'] = trim($arrExplode[0]);
+
+        $arr = explode('/', trim($arrExplode[1]));
+        $this->{$arrName}['hp'] = ((int)$arr[0] / (int)$arr[1]) * 100;
 
     }
 

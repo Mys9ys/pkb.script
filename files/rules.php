@@ -107,6 +107,6 @@ $arr = [
 
 ];
 
-$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/files/1message.json', 'w');
+$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/files/1rules.json', 'w');
 fwrite($fp, json_encode($arr));
 fclose($fp);

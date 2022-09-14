@@ -4,8 +4,8 @@ namespace core;
 
 trait tLoad
 {
-    protected $urlMesConfig = '/files/message.php';
-    protected $urlMesJson = '/files/1message.json';
+    protected $urlRulesConfig = '/files/rules.php';
+    protected $urlRulesJson = '/files/1rules.json';
 
     protected $urlEventConfig = '/files/event.php';
     protected $urlEventJson = '/files/1event.json';
@@ -16,17 +16,28 @@ trait tLoad
     protected $urlCrossRoadConfig = '/files/crossroad.php';
     protected $urlCrossRoadJson = '/files/1crossroad.json';
 
+    protected $urlAttackConfig = '/files/attack.php';
+    protected $urlAttackJson = '/files/1attack.json';
+
     protected $arrRules = [];
     protected $arrEvent = [];
     protected $arrInfo = [];
     protected $arrCrossRoad = [];
+    protected $arrAttack = [];
 
     public function __construct()
     {
-        $this->arrRules = $this->loadFiles($this->urlMesJson, $this->urlMesConfig);
-        $this->arrEvent = $this->loadFiles($this->urlEventJson, $this->urlEventConfig);
-        $this->arrInfo = $this->loadFiles($this->urlInfoJson, $this->urlInfoConfig);
-        $this->arrCrossRoad = $this->loadFiles($this->urlCrossRoadJson, $this->urlCrossRoadConfig);
+        $arrLib = [
+            'Rules',
+            'Event',
+            'Info',
+            'CrossRoad',
+            'Attack'
+        ];
+
+        foreach ($arrLib as $name) {
+            $this->{'arr' . $name} = $this->loadFiles($this->{'url' . $name . 'Json'}, $this->{'url' . $name . 'Config'});
+        }
     }
 
     protected function loadFiles($urlJson, $urlConfig)
