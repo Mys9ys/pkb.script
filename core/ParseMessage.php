@@ -5,6 +5,7 @@ namespace core;
 class ParseMessage
 {
     use tLoad;
+    use tBaseMethods;
 
     private $request = [];
     private $result = [];
@@ -34,12 +35,16 @@ class ParseMessage
         // вытягиваем id игрока
         $this->userId = $this->request['id'];
 
+        $this->getUserInfo($this->userId);
+
         //обработка сообщений
         $mesStr = $this->parseImg($this->request['mes']);
 
         $this->mesArr = explode('<br>', $mesStr);
 
         $this->detailParseMessage();
+
+        if (empty($this->result) || $this->result['active'] == 'not active') $this->parseNotDefined();
 
         return $this->result ?: ['active' => 'not active'];
     }
@@ -84,6 +89,7 @@ class ParseMessage
     protected function parseManyMessages()
     {
 
+        var_dump($this->mesArr);
 
         $firstMessage = $this->mesArr[0];
 
@@ -98,6 +104,24 @@ class ParseMessage
 
         $this->result = $this->detectFirstRowEventMethod($event);
 
+    }
+
+    protected function parseNotDefined()
+    {
+        $arrFind = $this->arrRules['notDefined'];
+        $arrExplode = [];
+        $active = '';
+        foreach ($arrFind as $key => $item) {
+            $arrExplode = explode($key, $this->mesArr[0]);
+            foreach ($arrExplode as $event) {
+                if ($item[trim($event)]) {
+                    $active = $this->arrEvent[$item[trim($event)]['type']];
+                }
+
+            }
+        }
+
+        $this->result = $active;
     }
 
     protected function getEmojiMethod()
@@ -352,6 +376,8 @@ class ParseMessage
         $this->battleFlag = true;
         $this->battleStep = 1;
 
+        $this->setUserInfo('battle', true);
+
         return $action;
     }
 
@@ -450,5 +476,39 @@ class ParseMessage
     protected function battleFirstStep()
     {
 
+    }
+
+    protected function fieldDreams()
+    {
+
+        $arr = explode(' ', $this->mesArr[1]);
+
+        $selector = [];
+
+        if (count($arr) >1) {
+            foreach ($arr as $word) {
+                $selector[] = mb_strlen($word);
+            }
+            if (count($selector) > 1) $selector = implode("_", $selector);
+        } else {
+            $selector = mb_strlen($arr[0]);
+        }
+
+        $arrWords = $this->arrDreams[$selector];
+
+        if (count($arrWords) == 1 && $arrWords) {
+            return ['active' => 'click_btn', 'btn' => $this->arrDreams[$selector]];
+        } else {
+            $this->setUserInfo('dreams', $arrWords);
+            $this->saveUserInfo($this->userId);
+
+            $this->parseFieldDreams($arrWords);
+        }
+
+    }
+
+    protected function parseFieldDreams($arrWords)
+    {
+        var_dump($arrWords);
     }
 }

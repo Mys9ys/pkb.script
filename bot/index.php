@@ -13,7 +13,7 @@ if ($_REQUEST) {
 
     $send = json_encode($arrWrite);
 
-    $fp = fopen('mes.json', 'w');
+    $fp = fopen($_REQUEST['id'].'mes.json', 'w');
     fwrite($fp, $send);
     fclose($fp);
 

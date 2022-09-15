@@ -24,6 +24,10 @@ $arr = [
         'active' => 'click_btn',
         'btn'=>'Освободиться'
     ],
+    'findDead' => [
+        'active' => 'click_btn',
+        'btn'=>'Обыскать'
+    ],
 
     'description' => [
         'active' => 'not_active'

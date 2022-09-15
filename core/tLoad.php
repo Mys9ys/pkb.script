@@ -19,11 +19,15 @@ trait tLoad
     protected $urlAttackConfig = '/files/attack.php';
     protected $urlAttackJson = '/files/1attack.json';
 
+    protected $urlDreamsConfig = '/files/dreams.php';
+    protected $urlDreamsJson = '/files/1dreams.json';
+
     protected $arrRules = [];
     protected $arrEvent = [];
     protected $arrInfo = [];
     protected $arrCrossRoad = [];
     protected $arrAttack = [];
+    protected $arrDreams = [];
 
     public function __construct()
     {
@@ -32,7 +36,8 @@ trait tLoad
             'Event',
             'Info',
             'CrossRoad',
-            'Attack'
+            'Attack',
+            'Dreams',
         ];
 
         foreach ($arrLib as $name) {
