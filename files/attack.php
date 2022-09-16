@@ -18,6 +18,6 @@ $arr = [
     '|Целебный огонь|' => 20,
 ];
 
-$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/files/1attack.json', 'w');
+$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/files/cache/1attack.json', 'w');
 fwrite($fp, json_encode($arr));
 fclose($fp);

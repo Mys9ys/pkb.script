@@ -167,6 +167,6 @@ $arr = [
 
 ];
 
-$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/files/1rules.json', 'w');
+$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/files/cache/1rules.json', 'w');
 fwrite($fp, json_encode($arr));
 fclose($fp);

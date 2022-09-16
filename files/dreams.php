@@ -8,6 +8,6 @@ $arr = [
 
 ];
 
-$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/files/1dreams.json', 'w');
+$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/files/cache/1dreams.json', 'w');
 fwrite($fp, json_encode($arr));
 fclose($fp);

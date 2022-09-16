@@ -14,6 +14,6 @@ $arr = [
     ],
 ];
 
-$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/files/1info.json', 'w');
+$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/files/cache/1info.json', 'w');
 fwrite($fp, json_encode($arr));
 fclose($fp);

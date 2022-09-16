@@ -127,6 +127,6 @@ $arr = [
 
 ];
 
-$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/files/1event.json', 'w');
+$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/files/cache/1event.json', 'w');
 fwrite($fp, json_encode($arr));
 fclose($fp);

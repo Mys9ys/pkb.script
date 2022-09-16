@@ -5,22 +5,22 @@ namespace core;
 trait tLoad
 {
     protected $urlRulesConfig = '/files/rules.php';
-    protected $urlRulesJson = '/files/1rules.json';
+    protected $urlRulesJson = '/files/cache/1rules.json';
 
     protected $urlEventConfig = '/files/event.php';
-    protected $urlEventJson = '/files/1event.json';
+    protected $urlEventJson = '/files/cache/1event.json';
 
     protected $urlInfoConfig = '/files/info.php';
-    protected $urlInfoJson = '/files/1info.json';
+    protected $urlInfoJson = '/files/cache/1info.json';
 
     protected $urlCrossRoadConfig = '/files/crossroad.php';
-    protected $urlCrossRoadJson = '/files/1crossroad.json';
+    protected $urlCrossRoadJson = '/files/cache/1crossroad.json';
 
     protected $urlAttackConfig = '/files/attack.php';
-    protected $urlAttackJson = '/files/1attack.json';
+    protected $urlAttackJson = '/files/cache/1attack.json';
 
     protected $urlDreamsConfig = '/files/dreams.php';
-    protected $urlDreamsJson = '/files/1dreams.json';
+    protected $urlDreamsJson = '/files/cache/1dreams.json';
 
     protected $arrRules = [];
     protected $arrEvent = [];
