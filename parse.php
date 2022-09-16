@@ -17,8 +17,8 @@ $mes = '[{"type":"send","id":"747762770", "mes" : "Символы:<br>■■■�
 $res = new \core\ParseMessage();
 
 echo '<pre>';
-var_dump(json_decode($mes));
-//var_dump($res->firstParseMessage($mes));
+//var_dump(json_decode($mes));
+var_dump($res->firstParseMessage($mes));
 echo '</pre>';
 
 
