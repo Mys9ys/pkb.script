@@ -89,7 +89,7 @@ class ParseMessage
     protected function parseManyMessages()
     {
 
-        var_dump($this->mesArr);
+//        var_dump($this->mesArr);
 
         $firstMessage = $this->mesArr[0];
 
@@ -129,18 +129,15 @@ class ParseMessage
 
     }
 
-    protected function getEmojiEvent($emoji, $findArr, $flag = '')
+    protected function getEmojiEvent($emoji, $findArr)
     {
         $event = $this->arrRules[$findArr][$emoji];
 
-        $active = $this->arrEvent[$event['type']] ?: ['active' => 'not active'];
+        $this->getEventMethod($event['type']);
 
-        if ($flag) {
-            return $active;
-        } else {
-            $this->result = $active;
-            return true;
-        }
+//        $active = $this->arrEvent[$event['type']] ?: ['active' => 'not active'];
+//
+//        $this->result = $active;
 
     }
 
@@ -156,6 +153,14 @@ class ParseMessage
             $this->result = $this->arrEvent[$event] ?: ['active' => 'not active'];
         }
 
+    }
+
+    protected function getEventMethod($event){
+        if (method_exists($this, $event)) {
+            $this->result = $this->{$event}($event);
+        } else {
+            $this->result = $this->arrEvent[$event] ?: ['active' => 'not active'];
+        }
     }
 
     protected function parseArtImgGame($mes)
@@ -257,6 +262,12 @@ class ParseMessage
     {
 //        var_dump('countTrophy');
         return '';
+    }
+    protected function countEat($event)
+    {
+        var_dump($event);
+//        var_dump('countTrophy');
+//        return '';
     }
 
     protected function trapAttack($event)
@@ -509,6 +520,40 @@ class ParseMessage
 
     protected function parseFieldDreams($arrWords)
     {
-        var_dump($arrWords);
+//        var_dump($arrWords);
     }
+
+    protected function mushroomsRoots($event)
+    {
+
+        $hellItem = mb_stripos($this->mesArr[0], 'Адский');
+
+        if(!$hellItem) {
+            return $this->arrEvent[$event];
+        } else {
+            return $this->arrEvent['findEvent'];
+        }
+
+    }
+
+    protected function fishingStart($event)
+    {
+        $bait = $this->mesArr[1];
+        $emoji = $this->parseEmoji($bait);
+        if($emoji) {
+            $bait = str_replace($emoji, '', $bait);
+            $bait = str_replace('Наживки осталось: ', '', $bait);
+
+            if($bait != 0) {
+                $action = $this->arrEvent[$event];
+            } else {
+                $action = $this->arrEvent['fishingEnd'];
+            }
+        }
+
+        return $action;
+
+    }
+
+
 }

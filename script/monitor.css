@@ -1,0 +1,10 @@
+.pkb-monitor {
+  background: #a6b2aa;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 5px;
+  margin-top: 7px;
+}
+/*# sourceMappingURL=monitor.css.map */

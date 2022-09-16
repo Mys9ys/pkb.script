@@ -20,6 +20,11 @@ $arr = [
         'btn'=>'В бой'
     ],
 
+    'mushroomsRoots' => [
+        'active' => 'click_btn',
+        'btn'=>'Собрать'
+    ],
+
     'trapAttack' => [
         'active' => 'click_btn',
         'btn'=>'Освободиться'
@@ -36,6 +41,29 @@ $arr = [
     'small_gold' => [
         'active' => 'click_btn',
         'btn'=>'Продолжить'
+    ],
+
+    'fishingStart' => [
+        'active' => 'click_btn',
+        'btn'=>'Закинуть удочку'
+    ],
+    'fishingEnd' => [
+        'active' => 'click_btn',
+        'btn'=>'Прервать рыбалку'
+    ],
+    'fishing' => [
+        'active' => 'click_btn',
+        'btn'=>'Подсечь'
+    ],
+
+    'exitEvent' => [
+        'active' => 'click_btn',
+        'btn'=>'Уйти'
+    ],
+
+    'countEat' => [
+        'active' => 'click_btn',
+        'btn'=>'not active'
     ],
 
     'equipment' => [
