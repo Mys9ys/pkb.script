@@ -265,9 +265,13 @@ class ParseMessage
     }
     protected function countEat($event)
     {
-        var_dump($event);
-//        var_dump('countTrophy');
-//        return '';
+        $lastRow = end($this->mesArr);
+
+        $emoji = $this->parseEmoji($lastRow);
+
+        if($emoji && $emoji ==='👁'){
+            return $this->findEvent('findDead');
+        }
     }
 
     protected function trapAttack($event)
