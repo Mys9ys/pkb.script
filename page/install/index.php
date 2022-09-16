@@ -22,8 +22,8 @@
 https://vk.com/im?*&sel=-182985865, https://vk.com/im?sel=-182985865
             </textarea>
             <li>Скопировать тело скрипта: (ctrl+a ctrl+c)</li>
-            <textarea name="" id="" cols="200" rows="120">
-                console.log('pkb.init')
+            <textarea name="" id="" cols="200" rows="110">
+console.log('pkb.init')
 
 let lastMesId = ''
 
@@ -49,9 +49,7 @@ function sendAjax(mes, btn =''){
 
     console.log(data);
     $.ajax({
-        // url: "https://toto.mys9ys9ka.ru/bot/",
-        url: "https://pkb.script/bot/",
-        // dataType: "json", // Для использования JSON формата получаемых данных
+        url: "https://pkb.mys9ys9ka.ru/bot/",
         method: "POST", // Что бы воспользоваться POST методом, меняем данную строку на POST
         data,
         success: function (result) {
@@ -65,10 +63,6 @@ function sendAjax(mes, btn =''){
         			clickBtn(res.btn)
         		}
         	}
-
-            // console.log('res',JSON.parse(result));
-            // Возвращаемые данные выводим в консоль
-
         }
     })
 }

@@ -5,7 +5,6 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/core/internal_settings.php';
 
-
 if ($_REQUEST) {
 
     $arrWrite = [];
