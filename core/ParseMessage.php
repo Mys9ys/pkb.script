@@ -42,8 +42,6 @@ class ParseMessage
 
         $this->mesArr = explode('<br>', $mesStr);
 
-        var_dump($this->mesArr);
-
         $this->detailParseMessage();
 
         if (empty($this->result) || $this->result['active'] == 'not active') $this->parseNotDefined();
