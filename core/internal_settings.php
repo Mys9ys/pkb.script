@@ -1,4 +1,7 @@
 <?php
+header('Access-Control-Allow-Origin: https://vk.com');
+header('Access-Control-Allow-Methods: GET, POST');
+header("Access-Control-Allow-Headers: X-Requested-With");
 
 function autoloadMainClasses($class_name){
     $class_name = $_SERVER['DOCUMENT_ROOT'] . '/' . $class_name;
