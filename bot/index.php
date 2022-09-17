@@ -11,9 +11,11 @@ if ($_REQUEST) {
     $arrWrite = [];
     $arrWrite[] = $_REQUEST;
 
+    $fileName = $_SERVER['DOCUMENT_ROOT'] . '/upload/' .$_REQUEST['id'].'mes.json';
+
     $send = json_encode($arrWrite);
 
-    $fp = fopen('/upload/' .$_REQUEST['id'].'mes.json', 'w');
+    $fp = fopen($fileName, 'w');
     fwrite($fp, $send);
     fclose($fp);
 

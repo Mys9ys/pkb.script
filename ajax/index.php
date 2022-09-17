@@ -9,7 +9,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/core/internal_settings.php';
 
 //echo($send = json_encode($_REQUEST));
 
-$fileName = '/upload/' .$_REQUEST['id'].'mes.json';
+$fileName = $_SERVER['DOCUMENT_ROOT'] . '/upload/' .$_REQUEST['id'].'mes.json';
 $arrWrite = [];
 $arrWrite[] = $_REQUEST;
 
