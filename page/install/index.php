@@ -11,7 +11,7 @@
     <div class="container">
         <h4>Версия бота: 1.1.6</h4>
         <p>Для установки требуется скачать плагин для браузера</p>
-        <a href="https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld?hl=ru" target="_blank">Плагин</a>
+        <a href="https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld?hl=ru" target="_blank">Скачать плагин</a>
         <br>
         <br>
         <img class="pkb_plugin" src="/page/install/img/pkb_instruction.png" alt="">
