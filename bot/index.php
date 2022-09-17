@@ -10,7 +10,16 @@ ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
-if(!$_REQUEST) $_REQUEST = '[{"type":"send","id":"747762770", "mes" : "Символы:<br>■■■■■■<br>Отправьте букву или текст:"}]';
+$id = 510815492;
+
+$mes = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/upload/'.$id.'mes.json');
+
+$test = new \core\ParseMessage();
+
+echo '<pre>';
+//var_dump(json_decode($mes));
+var_dump($test->firstParseMessage($mes));
+echo '</pre>';
 
 if ($_REQUEST) {
 
