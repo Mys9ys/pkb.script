@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container">
-        <h4>Версия бота: 1.1.5</h4>
+        <h4>Версия бота: 1.1.6</h4>
         <p>Для установки требуется скачать плагин для браузера</p>
         <a href="https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld?hl=ru" target="_blank">Плагин</a>
         <br>
@@ -49,7 +49,7 @@ function sendAjax(mes, btn =''){
 
     console.log(data);
     $.ajax({
-        url: "https://pkb.mys9ys9ka.ru/bot/",
+        url: "https://pkb.mys9ys9ka.ru/ajax/",
         method: "POST", // Что бы воспользоваться POST методом, меняем данную строку на POST
         data,
         success: function (result) {

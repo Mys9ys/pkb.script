@@ -143,6 +143,7 @@ class ParseMessage
 
     protected function getNoEmojiEvent($mes, $findArr)
     {// если в сообщении нет эмодзи
+
         $mes = $this->parseArtImgGame($mes);
 
         $event = $this->arrRules[$findArr][$mes]['type'];
@@ -233,7 +234,7 @@ class ParseMessage
         $put = mb_substr($str, 0, 1);
 
         if (!empty($put)) {
-            return strlen($put) > 1 ? $put : '';
+            return strlen($put) > 2 ? $put : '';
         } else {
             return '';
         }
@@ -389,8 +390,6 @@ class ParseMessage
     {
 
         $action = $this->arrEvent[$event];
-        $this->battleFlag = true;
-        $this->battleStep = 1;
 
         $this->setUserInfo('battle', true);
 
