@@ -10,7 +10,7 @@ ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
-
+if(!$_REQUEST) $_REQUEST = '[{"type":"send","id":"747762770", "mes" : "Символы:<br>■■■■■■<br>Отправьте букву или текст:"}]';
 
 if ($_REQUEST) {
 
