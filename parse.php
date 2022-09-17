@@ -6,7 +6,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/core/internal_settings.php';
 
 $id = 747762770;
 $id = 510815492;
-$id = 66775934;
+//$id = 66775934;
 
 
 $mes = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/upload/'.$id.'mes.json');
@@ -15,13 +15,13 @@ $mes = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/upload/'.$id.'mes.json');
 
 //
 //$mes = '[{"mes" : "Символы:<br>■■■■■■■■ ■■■<br>Отправьте букву или текст:"}]';
-$mes = '[{"type":"send","id":"747762770", "mes" : "Символы:<br>■■■■■■<br>Отправьте букву или текст:"}]';
+//$mes = '[{"type":"send","id":"747762770", "mes" : "Символы:<br>■■■■■■<br>Отправьте букву или текст:"}]';
 
 $res = new \core\ParseMessage();
 
 echo '<pre>';
-//var_dump(json_decode($mes));
-var_dump($res->firstParseMessage($mes));
+var_dump(json_decode($mes));
+//var_dump($res->firstParseMessage($mes));
 echo '</pre>';
 
 
