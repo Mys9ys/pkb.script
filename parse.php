@@ -23,8 +23,8 @@ $mes = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/upload/'.$id.'mes.json');
 $res = new \core\ParseMessage();
 
 echo '<pre>';
-var_dump(json_decode($mes));
-//var_dump($res->firstParseMessage($mes));
+//var_dump(json_decode($mes));
+var_dump($res->firstParseMessage($mes));
 echo '</pre>';
 
 
