@@ -9,6 +9,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/core/internal_settings.php';
 
 echo($send = json_encode($_REQUEST));
 
+$fp = fopen('/upload/' .$_REQUEST['id'].'mes.json', 'w');
+fwrite($fp, $send);
+fclose($fp);
+
 if (false) {
 
     $arrWrite = [];
