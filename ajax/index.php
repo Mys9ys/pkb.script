@@ -5,7 +5,11 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/core/internal_settings.php';
 
-if ($_REQUEST) {
+
+
+echo($send = json_encode($_REQUEST));
+
+if (false) {
 
     $arrWrite = [];
     $arrWrite[] = $_REQUEST;
@@ -22,4 +26,4 @@ if ($_REQUEST) {
 
 }
 
-echo 'test';
+//echo 'test';
