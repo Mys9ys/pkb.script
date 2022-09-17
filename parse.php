@@ -1,4 +1,5 @@
 <?php
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/core/internal_settings.php';
 
 $id = 747762770;
