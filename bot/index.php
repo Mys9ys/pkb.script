@@ -10,6 +10,8 @@ ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/core/internal_settings.php';
+
 $id = 510815492;
 
 $mes = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/upload/'.$id.'mes.json');
@@ -23,7 +25,7 @@ echo '</pre>';
 
 if ($_REQUEST) {
 
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/core/internal_settings.php';
+
 
     $arrWrite = [];
     $arrWrite[] = $_REQUEST;
