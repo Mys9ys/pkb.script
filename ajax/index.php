@@ -7,7 +7,7 @@ header('Content-Type: text/html; charset=utf-8');
 
 if ($_REQUEST) {
 
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/test/internal_settings.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/core/internal_settings.php';
 
     $arrWrite = [];
     $arrWrite[] = $_REQUEST;
@@ -20,7 +20,7 @@ if ($_REQUEST) {
     fwrite($fp, $send);
     fclose($fp);
 
-    $test = new \test\ParseMessage();
+    $test = new \core\ParseMessage();
 
     echo json_encode($test->firstParseMessage($send));
 }
