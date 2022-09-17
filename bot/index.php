@@ -6,26 +6,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 
 header('Content-Type: text/html; charset=utf-8');
 
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
-
-require_once $_SERVER['DOCUMENT_ROOT'] . '/core/internal_settings.php';
-
-$id = 510815492;
-
-$mes = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/upload/'.$id.'mes.json');
-
-$test = new \core\ParseMessage();
-
-echo '<pre>';
-var_dump(json_decode($mes));
-var_dump($test->firstParseMessage($mes));
-echo '</pre>';
-
 if ($_REQUEST) {
-
-
 
     $arrWrite = [];
     $arrWrite[] = $_REQUEST;
