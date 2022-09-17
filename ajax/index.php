@@ -18,7 +18,7 @@ if ($_REQUEST) {
 
     $test = new \core\ParseMessage();
 //
-//    echo json_encode($test->firstParseMessage($send));
+    echo json_encode($test->firstParseMessage($send));
 
 }
 
