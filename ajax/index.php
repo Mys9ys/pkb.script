@@ -7,14 +7,17 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/core/internal_settings.php';
 
 
 
-echo($send = json_encode($_REQUEST));
+//echo($send = json_encode($_REQUEST));
 
 $fileName = '/upload/' .$_REQUEST['id'].'mes.json';
+$arrWrite = [];
+$arrWrite[] = $_REQUEST;
 
-echo $fileName;
+$send = json_encode($arrWrite);
+//echo $fileName;
 
 $fp = fopen($fileName, 'w');
-fwrite($fp, $send);
+var_dump(fwrite($fp, $send));
 fclose($fp);
 
 if (false) {
