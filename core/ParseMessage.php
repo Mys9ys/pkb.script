@@ -369,7 +369,7 @@ class ParseMessage
 
         $percent = (int)$hp[0] / (int)$hp[1] * 100;
 
-        return $percent < 75 ? $active : '';
+        return $percent < 74 ? $active : '';
 
     }
 
