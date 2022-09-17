@@ -46,8 +46,6 @@ class ParseMessage
 
         if (empty($this->result) || $this->result['active'] == 'not active') $this->parseNotDefined();
 
-
-
         return $this->result ?: ['active' => 'not active'];
     }
 

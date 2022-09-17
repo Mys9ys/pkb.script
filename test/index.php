@@ -40,7 +40,7 @@ if ($_REQUEST) {
     fwrite($fp, $send);
     fclose($fp);
 
-    $test = new \core\ParseMessage();
+    $test = new \test\ParseMessage();
 
     echo json_encode($test->firstParseMessage($send));
 }
