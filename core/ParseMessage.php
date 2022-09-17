@@ -42,13 +42,9 @@ class ParseMessage
 
         $this->mesArr = explode('<br>', $mesStr);
 
-        var_dump($this->mesArr);
-
         $this->detailParseMessage();
 
         if (empty($this->result) || $this->result['active'] == 'not active') $this->parseNotDefined();
-
-
 
         return $this->result ?: ['active' => 'not active'];
     }
@@ -235,8 +231,9 @@ class ParseMessage
     protected function parseEmoji($str): string
     {
         $put = mb_substr($str, 0, 1);
+
         if (!empty($put)) {
-            return mb_ord($put) > 1900 ? $put : '';
+            return strlen($put) > 1 ? $put : '';
         } else {
             return '';
         }
