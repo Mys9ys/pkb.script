@@ -22,6 +22,8 @@ class ParseMessage
     private $enemyBattleProps = [];
     private $userBattleProps = [];
 
+    private $userHpHealing = 74;
+
     public function firstParseMessage($ajaxRequest): array
     {
 
@@ -43,6 +45,8 @@ class ParseMessage
         $this->mesArr = explode('<br>', $mesStr);
 
         $this->detailParseMessage();
+
+        var_dump($this->mesArr);
 
         if (empty($this->result) || $this->result['active'] == 'not active') $this->parseNotDefined();
 
@@ -156,7 +160,8 @@ class ParseMessage
 
     }
 
-    protected function getEventMethod($event){
+    protected function getEventMethod($event)
+    {
         if (method_exists($this, $event)) {
             $this->result = $this->{$event}($event);
         } else {
@@ -183,12 +188,12 @@ class ParseMessage
 
         unset($this->mesArr[0]);
 
-        foreach ($this->mesArr as $item) {
-            if (!empty($item)) {
-                $emoji = $this->parseEmoji($item);
+        foreach ($this->mesArr as $row) {
+            if (!empty($row)) {
+                $emoji = $this->parseEmoji($row);
 
                 if ($emoji) {
-                    $res = $this->detectEmojiEvent($emoji, 'many_row', $item);
+                    $res = $this->detectEmojiEvent($emoji, 'many_row', $row);
 
                     if ($res) $subAction = $res;
                 } else {
@@ -242,13 +247,13 @@ class ParseMessage
 
     protected function findEvent($event)
     {
-
         $action = $this->arrEvent[$event];
 
         $subAction = $this->detectManyRowEventMethod();
 
-        if (!empty($this->userBattleProps['hp']) && $this->userBattleProps['hp'] < 80) $subAction = $this->goHealing();
-        if (!empty($_COOKIE['userHP']) && $_COOKIE['userHP'] < 80) $subAction = $this->goHealing();
+        if (!empty($this->userBattleProps['hp']) && $this->userBattleProps['hp'] < $this->userHpHealing) $subAction = $this->goHealing();
+
+        if (!empty($this->userInfo['hp']) && $this->userInfo['hp'] < $this->userHpHealing) $subAction = $this->goHealing();
 
         return $subAction ?: $action;
     }
@@ -256,6 +261,7 @@ class ParseMessage
     protected function goHealing()
     {
         $active = ['active' => 'click_btn', 'btn' => 'Отдых'];
+        $this->setUserInfo('hp', 100);
 //        var_dump('countTrophy');
         return $active;
     }
@@ -265,20 +271,21 @@ class ParseMessage
 //        var_dump('countTrophy');
         return '';
     }
+
     protected function countEat($event)
     {
         $lastRow = end($this->mesArr);
 
         $emoji = $this->parseEmoji($lastRow);
 
-        if($emoji && $emoji ==='👁'){
+        if ($emoji && $emoji === '👁') {
             return $this->findEvent('findDead');
         }
     }
 
     protected function trapAttack($event)
     {
-        $this->userBattleProps['hp'] = 70;
+        $this->userInfo['hp'] = 70;
         $action = $this->arrEvent[$event];
 
         return $action;
@@ -369,7 +376,7 @@ class ParseMessage
 
         $percent = (int)$hp[0] / (int)$hp[1] * 100;
 
-        return $percent < 74 ? $active : '';
+        return $percent < $this->userHpHealing ? $active : '';
 
     }
 
@@ -406,7 +413,7 @@ class ParseMessage
 
         $this->parseBattleMessage();
 
-        $this->result = $this->calcAttack();
+        $this->result = $this->calcBtn();
 
         return $this->result;
 
@@ -424,7 +431,7 @@ class ParseMessage
         }
     }
 
-    protected function calcAttack()
+    protected function calcBtn()
     {
         $countAttack = count($this->btnArr);
 
@@ -436,15 +443,104 @@ class ParseMessage
                 $this->result = ['active' => 'click_btn', 'btn' => $this->btnArr[0]];
                 break;
             default:
-                $this->result = $this->calcAttackManyBtn();
+                $this->result = ['active' => 'click_btn', 'btn' => $this->calcAttack()];
         }
 
         return $this->result;
     }
 
-    protected function calcAttackManyBtn()
+    protected function calcAttack()
+    {
+        $userStatus = $this->userBattleHp();
+        $enemyStatus = $this->enemyBattleHp();
+
+        if($userStatus !== 1) return $this->healingBattleStep($userStatus);
+
+        return $this->attackBattleStep($enemyStatus);
+
+    }
+
+    protected function userBattleHp()
+    {
+        if ($this->userBattleProps['hp'] > 75) {
+            return 1; //'normal';
+        }
+        if ($this->userBattleProps['hp'] > 45) {
+            return 2; //'small';
+        }
+        if ($this->userBattleProps['hp'] <= 45) {
+            return 3;//'critical';
+        }
+    }
+
+    protected function enemyBattleHp()
     {
 
+        if ($this->enemyBattleProps['hp'] > 70) {
+            return 1; //'start';
+        }
+        if ($this->enemyBattleProps['hp'] > 40) {
+            return 2;//'middle';
+        }
+        if ($this->enemyBattleProps['hp'] <= 40) {
+            return 3;//'ending';
+        }
+    }
+
+    protected function healingBattleStep($status){
+
+
+        if($status === 2) {
+            $arrBtn = array_intersect($this->btnArr, $this->arrAttack['healingGroup']);
+
+            switch (count($arrBtn)){
+                case 0:
+                    return '';
+                    break;
+                case 1:
+                    return $arrBtn[0];
+                    break;
+            }
+        }
+
+        if($status === 3) {
+            return $this->drinkHealingPotion();
+        }
+    }
+
+    protected function drinkHealingPotion(){
+        return 'Зелье';
+    }
+
+    protected function attackBattleStep($status){
+        if($status === 1) {
+            $arrBtn = array_intersect($this->btnArr, $this->arrAttack['startingGroup']);
+
+            switch (count($arrBtn)){
+                case 0:
+                return $this->selectAttackByPriority();
+                break;
+            }
+        }
+
+        if($status === 2) {
+
+        }
+
+        if($status === 3) {
+            $arrBtn = array_intersect($this->btnArr, $this->arrAttack['endingGroup']);
+        }
+    }
+
+    protected function selectAttackByPriority(){
+        $arrBtn = [];
+        foreach ($this->btnArr as $btn){
+            $arrBtn[$btn] = $this->arrAttack[$btn];
+        }
+        $arrBtn = array_flip($arrBtn);
+        ksort($arrBtn);
+
+        return array_shift($arrBtn);
     }
 
     protected function parseBattleMessage()
@@ -481,10 +577,10 @@ class ParseMessage
         $this->{$arrName}['nation'] = trim($arrExplode[0]);
 
         $arr = explode('/', trim($arrExplode[1]));
-        $hp = ((int)$arr[0] / (int)$arr[1]) * 100;
+        $hp = (int)(((int)$arr[0] / (int)$arr[1]) * 100);
         $this->{$arrName}['hp'] = $hp;
 
-        if ($arrName == 'userBattleProps' && $hp < 100) setcookie("userHP", $hp, time() + 3600);
+        if ($arrName == 'userBattleProps' && $hp < 100) $this->setUserInfo('hp', $hp);
 
     }
 
@@ -500,7 +596,7 @@ class ParseMessage
 
         $selector = [];
 
-        if (count($arr) >1) {
+        if (count($arr) > 1) {
             foreach ($arr as $word) {
                 $selector[] = mb_strlen($word);
             }
@@ -532,7 +628,7 @@ class ParseMessage
 
         $hellItem = mb_stripos($this->mesArr[0], 'Адский');
 
-        if(!$hellItem) {
+        if (!$hellItem) {
             return $this->arrEvent[$event];
         } else {
             return $this->arrEvent['findEvent'];
@@ -544,11 +640,11 @@ class ParseMessage
     {
         $bait = $this->mesArr[1];
         $emoji = $this->parseEmoji($bait);
-        if($emoji) {
+        if ($emoji) {
             $bait = str_replace($emoji, '', $bait);
             $bait = str_replace('Наживки осталось: ', '', $bait);
 
-            if($bait != 0) {
+            if ($bait != 0) {
                 $action = $this->arrEvent[$event];
             } else {
                 $action = $this->arrEvent['fishingEnd'];
